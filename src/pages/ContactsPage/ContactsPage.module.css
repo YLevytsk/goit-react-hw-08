@@ -1,0 +1,33 @@
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.formsWrapper {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+
+.formBlock {
+  flex: 1 1 58%;
+  min-width: 340px;
+}
+
+.searchBlock {
+  flex: 1 1 38%;
+  min-width: 280px;
+}
+.block {
+  flex: 1 1 48%;
+  min-width: 320px;
+  box-sizing: border-box;
+}
+
+  

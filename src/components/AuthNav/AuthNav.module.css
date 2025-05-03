@@ -1,0 +1,11 @@
+.authNav {
+    display: flex;
+    gap: 20px;
+    align-items: right;
+  }
+  
+  .link {
+    text-decoration: none;
+    display: flex;
+  }
+  

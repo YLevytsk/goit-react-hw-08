@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { selectFilteredContacts } from '../../redux/contactsSlice';
-import { deleteContact } from '../../redux/contactsOps';
+import { selectFilteredContacts } from '../../redux/contacts/selectors';
+import { deleteContact } from '../../redux/contacts/operations';
 import Contact from '../Contact/Contact';
+import { toast } from 'react-hot-toast';
 import styles from './ContactList.module.css';
 
 export default function ContactList() {
@@ -9,16 +10,25 @@ export default function ContactList() {
   const contacts = useSelector(selectFilteredContacts);
 
   const handleDelete = id => {
-    dispatch(deleteContact(id));
+    const shouldDelete = window.confirm('Are you sure you want to delete this contact?');
+    if (shouldDelete) {
+      dispatch(deleteContact(id))
+        .unwrap()
+        .then(() => toast.success('Contact deleted successfully!'))
+        .catch(() => toast.error('Failed to delete contact'));
+    }
   };
 
   return (
-    <ul className={styles.list}>
+    <div className={styles.gridContainer}>
       {contacts.map(contact => (
-        <li key={contact.id} className={styles.item}>
+        <div key={contact.id} className={styles.gridItem}>
           <Contact contact={contact} onDelete={handleDelete} />
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
+
+
+

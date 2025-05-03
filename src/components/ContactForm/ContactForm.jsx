@@ -1,51 +1,79 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contacts/operations';
+import { toast } from 'react-hot-toast';
+
+import { TextField, Button, Paper, Box } from '@mui/material';
 import css from './ContactForm.module.css';
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-  number: Yup.string()
-    .min(3, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
-});
+export default function ContactForm() {
+  const dispatch = useDispatch();
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-export default function ContactForm({ onAdd }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!(name.trim() && number.trim())) {
+      toast.error('Please fill in both name and number');
+      return;
+    }
+
+    dispatch(addContact({ name, number }))
+      .unwrap()
+      .then(() => {
+        toast.success('Contact added successfully!');
+        setName('');
+        setNumber('');
+      })
+      .catch(() => toast.error('Failed to add contact'));
+  };
+
+  const isDisabled = !(name.trim() && number.trim());
+
   return (
-    <div className={css.wrapper}>
-      <Formik
-        initialValues={{ name: '', number: '' }}
-        validationSchema={validationSchema}
-        onSubmit={(values, actions) => {
-          const newContact = {
-            name: values.name,
-            number: values.number,
-          };
+    <Paper elevation={3} className={css.formCard}>
+      <form onSubmit={handleSubmit} className={css.form}>
+        <Box className={css.fieldGroup}>
+          <TextField
+            label="Name"
+            name="name"
+            size="small"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
+          />
+        </Box>
 
-          onAdd(newContact);
-          actions.resetForm();
-        }}
-      >
-        <Form className={css.form}>
-          <label className={css.label}>
-            Name
-            <Field className={css.input} type="text" name="name" />
-            <ErrorMessage className={css.error} name="name" component="div" />
-          </label>
+        <Box className={css.fieldGroup}>
+          <TextField
+            label="Number"
+            name="number"
+            size="small"
+            value={number}
+            onChange={(e) => setNumber(e.target.value)}
+            fullWidth
+          />
+        </Box>
 
-          <label className={css.label}>
-            Number
-            <Field className={css.input} type="text" name="number" />
-            <ErrorMessage className={css.error} name="number" component="div" />
-          </label>
-
-          <button className={css.btn} type="submit">Add Contact</button>
-        </Form>
-      </Formik>
-    </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={isDisabled}
+        >
+          Add Contact
+        </Button>
+      </form>
+    </Paper>
   );
 }
+
+
+
+
+
+
+
 
