@@ -6,6 +6,7 @@ import {
   updateContact,
 } from './operations';
 import { selectNameFilter } from '../filters/slice';
+import { logOut } from '../auth/operations';
 
 const initialState = {
   items: [],
@@ -19,7 +20,7 @@ const contactsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Fetch
+      
       .addCase(fetchContacts.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -33,7 +34,7 @@ const contactsSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Add
+      
       .addCase(addContact.pending, (state) => {
         state.error = null;
       })
@@ -44,7 +45,7 @@ const contactsSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Delete
+      
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.items = state.items.filter(
           (contact) => contact.id !== action.payload.id
@@ -54,7 +55,7 @@ const contactsSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Update
+      
       .addCase(updateContact.pending, (state) => {
         state.error = null;
       })
@@ -68,11 +69,19 @@ const contactsSlice = createSlice({
       })
       .addCase(updateContact.rejected, (state, action) => {
         state.error = action.payload;
+      })
+
+      
+      .addCase(logOut.fulfilled, (state) => {
+        state.items = [];
+        state.isLoading = false;
+        state.error = null;
       });
   },
 });
 
 export const contactsReducer = contactsSlice.reducer;
+
 
 export const selectContacts = (state) => state.contacts.items;
 export const selectLoading = (state) => state.contacts.isLoading;
@@ -86,6 +95,7 @@ export const selectFilteredContacts = createSelector(
     );
   }
 );
+
 
 
 

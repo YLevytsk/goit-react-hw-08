@@ -29,7 +29,7 @@ export default function Contact({ contact }) {
 
   const handleSave = async (id, values) => {
     try {
-      await dispatch(updateContact({ id, ...values })).unwrap();
+      await dispatch(updateContact({ id, values })).unwrap();
       toast.success('Contact updated');
     } catch {
       toast.error('Failed to update contact');
@@ -68,12 +68,7 @@ export default function Contact({ contact }) {
           </Stack>
         </Box>
 
-        <Stack
-          direction="row"
-          spacing={1}
-          justifyContent="center"
-          mt={3}
-        >
+        <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
           <IconButton color="primary" onClick={handleEdit}>
             <EditIcon />
           </IconButton>
@@ -102,6 +97,7 @@ export default function Contact({ contact }) {
     </>
   );
 }
+
 
 
 
